@@ -10,7 +10,7 @@ A Tauri 2 plugin exposing Apple's iCloud Key-Value Store
 Tauri app sync small data (≤1 MB total, ≤1024 keys) across a user's Apple
 devices with no server, no accounts, and no CloudKit schema.
 
-Built by the makers of [Team Times](https://apps.apple.com/app/team-times)
+Built by the makers of [Team Times](https://kmuncie.com/team-times/)
 (the README credits the app).
 
 ## Why it needs to exist

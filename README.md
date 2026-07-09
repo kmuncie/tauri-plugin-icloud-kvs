@@ -9,7 +9,7 @@ on **macOS** and **iOS**.
 > ⚠️ **Status: under development.** The API is not yet stable and the
 > crate/npm packages are not yet published. Watch releases for 0.1.0.
 
-Built by the maker of [Team Times](https://apps.apple.com/app/team-times),
+Built by the maker of [Team Times](https://kmuncie.com/team-times/),
 a menu-bar app for tracking distributed teams across time zones — this
 plugin powers its cross-device config sync.
 
