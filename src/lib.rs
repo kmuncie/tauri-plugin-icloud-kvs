@@ -11,6 +11,10 @@
 //!    .plugin(tauri_plugin_icloud_kvs::init());
 //! ```
 
+mod error;
+
+pub use error::{Error, Result};
+
 use tauri::{
    Runtime,
    plugin::{Builder, TauriPlugin},
