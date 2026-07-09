@@ -1,0 +1,5 @@
+[alias]
+lint-clippy = "clippy --all-targets --all-features -- -D warnings"
+fix-clippy = "clippy --fix"
+lint-fmt = "fmt -- --check"
+fix-fmt = "fmt"

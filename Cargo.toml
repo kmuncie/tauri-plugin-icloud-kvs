@@ -1,0 +1,19 @@
+[package]
+name = "tauri-plugin-icloud-kvs"
+version = "0.1.0"
+description = "Tauri 2 plugin for Apple's iCloud Key-Value Store (NSUbiquitousKeyValueStore) on macOS and iOS"
+authors = ["Kevin Muncie <kevin@kmuncie.com>"]
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/kmuncie/tauri-plugin-icloud-kvs"
+edition = "2024"
+rust-version = "1.89.0"
+links = "tauri-plugin-icloud-kvs"
+
+[dependencies]
+tauri = "2.11.5"
+serde = { version = "1.0.228", features = ["derive"] }
+serde_json = "1.0.150"
+thiserror = "2.0.18"
+
+[build-dependencies]
+tauri-plugin = { version = "2.6.3", features = ["build"] }
