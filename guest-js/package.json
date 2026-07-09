@@ -8,6 +8,9 @@
    "main": "dist/index.js",
    "types": "dist/index.d.ts",
    "files": ["dist"],
+   "engines": {
+      "node": ">=24"
+   },
    "scripts": {
       "build": "tsc"
    },
