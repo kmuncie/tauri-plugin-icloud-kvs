@@ -75,6 +75,12 @@ Neither covers `NSUbiquitousKeyValueStore`, and neither supports macOS.
 - [ ] **M1.2 — macOS implementation.** get/set/remove/keys/synchronize
   working on macOS with the entitlement, verified manually between two Macs
   (or Mac + iCloud web-observable behavior). Unit tests for the Rust layer.
+  Carried over from the M1.1 review: create the `permissions/` dir in the
+  same commit as the first `COMMANDS` entry (build.rs will start requiring
+  it); backfill Display/serialization test assertions for the
+  `Serialization` and `PlatformError` error variants when real code first
+  constructs them; consider renaming `Error::PlatformError` to
+  `Error::Platform` before anything constructs it.
 - [ ] **M1.3 — iOS implementation.** Same API via Swift mobile plugin;
   verified in the iOS simulator/device against the same iCloud container as
   the Mac build.
@@ -82,7 +88,10 @@ Neither covers `NSUbiquitousKeyValueStore`, and neither supports macOS.
   Tauri events on both platforms; two-device live-update demo works.
 - [ ] **M1.5 — Polish + publish.** TypeScript bindings finalized, example
   app, entitlement/provisioning docs, publish to crates.io + npm, announce
-  (Tauri Discord, awesome-tauri PR).
+  (Tauri Discord, awesome-tauri PR). Carried over from the M1.1 review: the
+  npm package's `"files": ["dist"]` won't include the repo-root license
+  texts — copy `LICENSE-*` into `guest-js/` at publish time (e.g. a
+  `prepack` script) so the tarball ships license texts.
 
 ## Definition of done
 
