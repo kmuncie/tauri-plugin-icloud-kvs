@@ -3,7 +3,7 @@
 ## Prerequisites
 
 - Rust (version pinned in `rust-toolchain.toml`; rustup installs it automatically)
-- Node.js 22+ (for the TypeScript guest bindings)
+- Node.js 24 (pinned in `.nvmrc`; run `nvm use`) — for the TypeScript guest bindings
 - macOS (the plugin targets Apple platforms; tests require macOS)
 
 ## Commands

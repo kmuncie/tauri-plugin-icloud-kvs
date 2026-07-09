@@ -1,4 +1,4 @@
-# Project 1: `tauri-plugin-icloud-kvs` (standalone open source)
+# Project 1: `tauri-plugin-icloud-kvs`
 
 > **Portability note:** Lives here; originated in the team-times roadmap,
 > which retains the surrounding multi-platform context.
@@ -11,7 +11,7 @@ Tauri app sync small data (≤1 MB total, ≤1024 keys) across a user's Apple
 devices with no server, no accounts, and no CloudKit schema.
 
 Built by the makers of [Team Times](https://apps.apple.com/app/team-times)
-(mention in README — this project doubles as advertising for the app).
+(the README credits the app).
 
 ## Why it needs to exist
 
