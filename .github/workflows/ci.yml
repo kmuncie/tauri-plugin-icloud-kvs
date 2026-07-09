@@ -1,0 +1,30 @@
+name: CI
+
+on:
+   push:
+      branches: [main]
+   pull_request:
+
+jobs:
+   rust:
+      runs-on: macos-14
+      steps:
+         - uses: actions/checkout@v4
+         - name: Install toolchain from rust-toolchain.toml
+           run: rustup show active-toolchain || rustup toolchain install
+         - uses: Swatinem/rust-cache@v2
+         - name: Lint
+           run: cargo lint-clippy && cargo lint-fmt
+         - name: Test
+           run: cargo test
+
+   typescript:
+      runs-on: macos-14
+      steps:
+         - uses: actions/checkout@v4
+         - uses: actions/setup-node@v4
+           with:
+              node-version: 22
+         - name: Build guest bindings
+           run: npm ci && npm run build
+           working-directory: guest-js
