@@ -69,7 +69,7 @@ Neither covers `NSUbiquitousKeyValueStore`, and neither supports macOS.
 
 ## Milestones
 
-- [ ] **M1.1 — Repo scaffold.** New repo from the Tauri 2 plugin template
+- [x] **M1.1 — Repo scaffold.** New repo from the Tauri 2 plugin template
   (Swift mobile + Rust desktop layout), license, CI (build + clippy + fmt per
   Rust standards), README skeleton, this document moved in as the plan.
 - [ ] **M1.2 — macOS implementation.** get/set/remove/keys/synchronize
