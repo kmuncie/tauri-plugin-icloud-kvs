@@ -1,0 +1,36 @@
+# tauri-plugin-icloud-kvs
+
+Sync small data across a user's Apple devices from a [Tauri 2](https://tauri.app)
+app — no server, no user accounts, no CloudKit schema. This plugin exposes
+Apple's iCloud Key-Value Store
+([`NSUbiquitousKeyValueStore`](https://developer.apple.com/documentation/foundation/nsubiquitouskeyvaluestore))
+on **macOS** and **iOS**.
+
+> ⚠️ **Status: under development.** The API is not yet stable and the
+> crate/npm packages are not yet published. Watch releases for 0.1.0.
+
+Built by the maker of [Team Times](https://apps.apple.com/app/team-times),
+a menu-bar app for tracking distributed teams across time zones — this
+plugin powers its cross-device config sync.
+
+## Platform support
+
+| Platform | Support |
+|----------|---------|
+| macOS    | Planned (pure Rust via `objc2`) |
+| iOS      | Planned (Swift) |
+| Others   | Commands return an `UnsupportedPlatform` error |
+
+## What iCloud KVS gives you (and its limits)
+
+- 1 MB total per app, max 1024 keys, key names ≤ 64 bytes UTF-8
+- Last-writer-wins conflict resolution; sync latency of seconds (no guarantees)
+- Quota violations are reported **asynchronously** via change events, never
+  as a call-site error
+- Requires the `com.apple.developer.ubiquity-kvstore-identifier` entitlement
+  (setup guide coming with the first release)
+
+## License
+
+Dual-licensed under [MIT](LICENSE-MIT) or [Apache-2.0](LICENSE-APACHE), at
+your option.
