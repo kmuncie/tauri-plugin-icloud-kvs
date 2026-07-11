@@ -15,7 +15,6 @@ use serde_json::{Map, Number, Value};
 
 use crate::error::{Error, Result};
 
-#[allow(dead_code)]
 pub(crate) fn json_to_plist(value: &Value) -> Result<Retained<AnyObject>> {
    match value {
       Value::Null => Err(Error::Serialization(
@@ -59,7 +58,6 @@ fn number_to_plist(n: &Number) -> Result<Retained<AnyObject>> {
    }
 }
 
-#[allow(dead_code)]
 pub(crate) fn plist_to_json(obj: &AnyObject) -> Result<Value> {
    if let Some(s) = obj.downcast_ref::<NSString>() {
       return Ok(Value::String(s.to_string()));

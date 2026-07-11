@@ -13,7 +13,6 @@ pub(crate) const MAX_KEY_BYTES: usize = 64;
 #[allow(dead_code)]
 pub(crate) const MAX_VALUE_BYTES: usize = 1_048_576;
 
-#[allow(dead_code)]
 pub(crate) fn validate_key(key: &str) -> Result<()> {
    if key.is_empty() {
       return Err(Error::InvalidKey("key must not be empty".into()));
@@ -29,7 +28,6 @@ pub(crate) fn validate_key(key: &str) -> Result<()> {
    Ok(())
 }
 
-#[allow(dead_code)]
 pub(crate) fn validate_value(value: &Value) -> Result<()> {
    let size = serde_json::to_vec(value)
       .map_err(|e| Error::Serialization(e.to_string()))?
