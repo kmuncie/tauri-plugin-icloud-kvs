@@ -24,7 +24,7 @@ pub enum Error {
    Serialization(String),
 
    #[error("platform error: {0}")]
-   PlatformError(String),
+   Platform(String),
 }
 
 impl Serialize for Error {
@@ -50,6 +50,14 @@ mod tests {
       assert_eq!(
          Error::ValueTooLarge { size: 2_000_000 }.to_string(),
          "value too large: 2000000 bytes exceeds the 1 MB iCloud KVS limit"
+      );
+      assert_eq!(
+         Error::Serialization("null is not a storable value".into()).to_string(),
+         "serialization error: null is not a storable value"
+      );
+      assert_eq!(
+         Error::Platform("NSUbiquitousKeyValueStore unavailable".into()).to_string(),
+         "platform error: NSUbiquitousKeyValueStore unavailable"
       );
    }
 
