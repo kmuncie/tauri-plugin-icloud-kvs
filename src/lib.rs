@@ -12,6 +12,7 @@
 //! ```
 
 mod error;
+mod validation;
 
 pub use error::{Error, Result};
 
