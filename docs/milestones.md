@@ -72,7 +72,7 @@ Neither covers `NSUbiquitousKeyValueStore`, and neither supports macOS.
 - [x] **M1.1 — Repo scaffold.** New repo from the Tauri 2 plugin template
   (Swift mobile + Rust desktop layout), license, CI (build + clippy + fmt per
   Rust standards), README skeleton, this document moved in as the plan.
-- [ ] **M1.2 — macOS implementation.** get/set/remove/keys/synchronize
+- [x] **M1.2 — macOS implementation.** get/set/remove/keys/synchronize
   working on macOS. Unit tests for the Rust layer; store round-trip test
   gated behind `KVS_INTEGRATION=1` (unentitled processes get an inert
   store — see `DEVELOPERS.md`). Real-device sync verification is
