@@ -21,10 +21,23 @@
 unit tests in-file, doc examples annotated `no_run`. See `rustfmt.toml`
 and `.cargo/config.toml`.
 
-## Cross-device sync verification
+## Cross-device sync verification (manual)
 
-Manual protocol (two devices, one Apple ID) — to be documented with M1.4
-change events. CI cannot exercise real iCloud sync.
+CI only runs the non-store-dependent unit/integration tests (see
+"Integration test" below); real iCloud sync needs signed, entitled app
+bundles on two devices with the same Apple ID. Protocol:
+
+1. Build a scratch Tauri app (or, once it exists, `examples/demo-app`)
+   that registers this plugin, with the
+   `com.apple.developer.ubiquity-kvstore-identifier` entitlement set to
+   `$(TeamIdentifierPrefix)$(CFBundleIdentifier)` and codesigned with a
+   Development certificate on both Macs.
+2. On Mac A: `set('sync-check', <timestamp>)`.
+3. On Mac B: poll `get('sync-check')` (KVS latency is seconds to
+   minutes; no guarantees). The value arriving proves upload + download.
+4. Repeat in the reverse direction.
+
+`accountStatus()` must report `available` on both machines first.
 
 ## Integration test: `tests/kvs_roundtrip.rs`
 

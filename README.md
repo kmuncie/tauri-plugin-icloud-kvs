@@ -17,9 +17,35 @@ plugin powers its cross-device config sync.
 
 | Platform | Support |
 |----------|---------|
-| macOS    | Planned (pure Rust via `objc2`) |
+| macOS    | ✅ Supported (pure Rust via `objc2`, no Swift toolchain needed) |
 | iOS      | Planned (Swift) |
 | Others   | Commands return an `UnsupportedPlatform` error |
+
+## Usage (macOS, pre-release)
+
+Register the plugin and allow its commands in your capability file:
+
+```rust
+tauri::Builder::default()
+   .plugin(tauri_plugin_icloud_kvs::init())
+```
+
+```json
+{ "permissions": ["icloud-kvs:default"] }
+```
+
+```ts
+import { set, get } from 'tauri-plugin-icloud-kvs-api';
+
+await set('theme', { mode: 'dark', accent: 'teal' });
+const theme = await get('theme');
+```
+
+Cross-device sync requires the
+`com.apple.developer.ubiquity-kvstore-identifier` entitlement (guide
+coming with the first release). Without it — or when signed out of
+iCloud — the store still works locally but never syncs; use
+`accountStatus()` to detect the signed-out case.
 
 ## What iCloud KVS gives you (and its limits)
 
