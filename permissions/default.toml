@@ -1,0 +1,13 @@
+"$schema" = "schemas/schema.json"
+
+[default]
+description = "Default permissions for the icloud-kvs plugin: allows every command."
+permissions = [
+   "allow-get",
+   "allow-set",
+   "allow-remove",
+   "allow-keys",
+   "allow-get-all",
+   "allow-synchronize",
+   "allow-account-status",
+]

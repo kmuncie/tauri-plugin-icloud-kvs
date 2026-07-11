@@ -11,6 +11,7 @@
 //!    .plugin(tauri_plugin_icloud_kvs::init());
 //! ```
 
+mod commands;
 #[cfg(target_os = "macos")]
 mod conversion;
 mod desktop;
@@ -33,5 +34,15 @@ use tauri::{
 
 /// Initializes the iCloud Key-Value Store plugin.
 pub fn init<R: Runtime>() -> TauriPlugin<R> {
-   Builder::new("icloud-kvs").build()
+   Builder::new("icloud-kvs")
+      .invoke_handler(tauri::generate_handler![
+         commands::get,
+         commands::set,
+         commands::remove,
+         commands::keys,
+         commands::get_all,
+         commands::synchronize,
+         commands::account_status
+      ])
+      .build()
 }
