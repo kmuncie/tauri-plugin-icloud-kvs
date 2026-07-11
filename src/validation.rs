@@ -6,11 +6,9 @@ use serde_json::Value;
 use crate::error::{Error, Result};
 
 /// KVS key names are limited to 64 bytes of UTF-8.
-#[allow(dead_code)]
 pub(crate) const MAX_KEY_BYTES: usize = 64;
 
 /// The whole store is capped at 1 MB; a single value can never exceed it.
-#[allow(dead_code)]
 pub(crate) const MAX_VALUE_BYTES: usize = 1_048_576;
 
 pub(crate) fn validate_key(key: &str) -> Result<()> {

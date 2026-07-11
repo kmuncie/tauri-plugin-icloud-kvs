@@ -41,10 +41,11 @@ await set('theme', { mode: 'dark', accent: 'teal' });
 const theme = await get('theme');
 ```
 
-Cross-device sync requires the
+This plugin requires the
 `com.apple.developer.ubiquity-kvstore-identifier` entitlement (guide
-coming with the first release). Without it — or when signed out of
-iCloud — the store still works locally but never syncs; use
+coming with the first release). Without it, the backing store is
+inert — writes silently no-op. With the entitlement but signed out of
+iCloud, the store works locally but never syncs; use
 `accountStatus()` to detect the signed-out case.
 
 ## What iCloud KVS gives you (and its limits)
@@ -54,7 +55,7 @@ iCloud — the store still works locally but never syncs; use
 - Quota violations are reported **asynchronously** via change events, never
   as a call-site error
 - Requires the `com.apple.developer.ubiquity-kvstore-identifier` entitlement
-  (setup guide coming with the first release)
+  (see "Usage" above; setup guide coming with the first release)
 
 ## License
 

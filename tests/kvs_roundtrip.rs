@@ -17,7 +17,7 @@ use tauri_plugin_icloud_kvs as kvs;
 
 #[test]
 fn round_trips_set_get_keys_get_all_remove() {
-   if std::env::var("KVS_INTEGRATION").is_err() {
+   if std::env::var("KVS_INTEGRATION").as_deref() != Ok("1") {
       eprintln!(
          "skipping: requires KVS_INTEGRATION=1 and a code-signed host with \
           the ubiquity-kvstore-identifier entitlement (see DEVELOPERS.md)"
