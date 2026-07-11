@@ -17,3 +17,17 @@ thiserror = "2.0.18"
 
 [build-dependencies]
 tauri-plugin = { version = "2.6.3", features = ["build"] }
+
+[target.'cfg(target_os = "macos")'.dependencies]
+objc2 = "0.6.4"
+objc2-foundation = { version = "0.3.2", features = [
+   "NSArray",
+   "NSData",
+   "NSDictionary",
+   "NSEnumerator",
+   "NSFileManager",
+   "NSObject",
+   "NSString",
+   "NSUbiquitousKeyValueStore",
+   "NSValue",
+] }

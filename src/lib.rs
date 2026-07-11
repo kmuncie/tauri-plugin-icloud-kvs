@@ -11,6 +11,8 @@
 //!    .plugin(tauri_plugin_icloud_kvs::init());
 //! ```
 
+#[cfg(target_os = "macos")]
+mod conversion;
 mod error;
 mod models;
 mod validation;
