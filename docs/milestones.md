@@ -73,19 +73,23 @@ Neither covers `NSUbiquitousKeyValueStore`, and neither supports macOS.
   (Swift mobile + Rust desktop layout), license, CI (build + clippy + fmt per
   Rust standards), README skeleton, this document moved in as the plan.
 - [ ] **M1.2 — macOS implementation.** get/set/remove/keys/synchronize
-  working on macOS with the entitlement, verified manually between two Macs
-  (or Mac + iCloud web-observable behavior). Unit tests for the Rust layer.
-  Carried over from the M1.1 review: create the `permissions/` dir in the
-  same commit as the first `COMMANDS` entry (build.rs will start requiring
-  it); backfill Display/serialization test assertions for the
-  `Serialization` and `PlatformError` error variants when real code first
-  constructs them; consider renaming `Error::PlatformError` to
-  `Error::Platform` before anything constructs it.
+  working on macOS. Unit tests for the Rust layer; store round-trip test
+  gated behind `KVS_INTEGRATION=1` (unentitled processes get an inert
+  store — see `DEVELOPERS.md`). Real-device sync verification is
+  **deferred to Team Times integration** (~M1.5): contributors never need
+  entitled hardware, but sync must be observed working on real devices
+  once before the 0.1.0 publish/announce. M1.1-review carryovers
+  (permissions/ dir timing, error-test backfill, `Error::Platform`
+  rename) all landed during implementation.
 - [ ] **M1.3 — iOS implementation.** Same API via Swift mobile plugin;
   verified in the iOS simulator/device against the same iCloud container as
   the Mac build.
 - [ ] **M1.4 — Change events.** External-change notifications emitted as
-  Tauri events on both platforms; two-device live-update demo works.
+  Tauri events on both platforms; live-update behavior demonstrated via
+  Team Times (or the example app) rather than a dedicated two-device rig.
+  Carryover from M1.2 review: handle or document foreign `NSDate` values
+  in `plist_to_json` (currently one foreign NSDate fails all of
+  `get_all`).
 - [ ] **M1.5 — Polish + publish.** TypeScript bindings finalized, example
   app, entitlement/provisioning docs, publish to crates.io + npm, announce
   (Tauri Discord, awesome-tauri PR). Carried over from the M1.1 review: the
