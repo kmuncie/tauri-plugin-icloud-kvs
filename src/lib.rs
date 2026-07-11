@@ -12,9 +12,11 @@
 //! ```
 
 mod error;
+mod models;
 mod validation;
 
 pub use error::{Error, Result};
+pub use models::AccountStatus;
 
 use tauri::{
    Runtime,
