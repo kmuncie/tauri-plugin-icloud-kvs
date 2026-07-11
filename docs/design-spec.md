@@ -147,9 +147,15 @@ has a dedicated "Quota" section with example detection code.
   conversion and key/size validation. Conversion and validation logic is
   kept pure and separate from the `objc2` calls so these run on any
   platform.
-- **macOS integration test** (CI): real KVS round-trip
-  (get/set/remove/keys) — the local store functions without an iCloud
-  account, so this runs on GitHub's macOS runners.
+- **macOS integration test:** real KVS round-trip (get/set/remove/keys).
+  *Correction (found during M1.2):* `NSUbiquitousKeyValueStore` has no
+  functional backing store — not even the local-only, no-account
+  fallback — unless the process is code-signed with the
+  `ubiquity-kvstore-identifier` entitlement. A bare `cargo test` binary
+  can never carry that entitlement, so the round-trip test is gated
+  behind `KVS_INTEGRATION=1` and must be exercised from a signed,
+  entitled host (e.g. the example app's dev build). CI runs only the
+  non-store-dependent tests; see `DEVELOPERS.md`.
 - **Cross-device sync and change events:** manual verification protocol in
   `DEVELOPERS.md` (two devices, one Apple ID); genuinely not automatable.
 - **Example app** doubles as the manual test rig: key/value editor pane
