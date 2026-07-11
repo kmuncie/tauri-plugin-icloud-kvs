@@ -7,7 +7,9 @@
    "type": "module",
    "main": "dist/index.js",
    "types": "dist/index.d.ts",
-   "files": ["dist"],
+   "files": [
+      "dist"
+   ],
    "engines": {
       "node": ">=24"
    },
@@ -16,5 +18,8 @@
    },
    "devDependencies": {
       "typescript": "7.0.2"
+   },
+   "dependencies": {
+      "@tauri-apps/api": "2.11.1"
    }
 }
