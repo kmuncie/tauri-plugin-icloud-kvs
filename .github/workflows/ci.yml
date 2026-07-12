@@ -15,6 +15,8 @@ jobs:
          - uses: Swatinem/rust-cache@v2
          - name: Lint
            run: cargo lint-clippy && cargo lint-fmt
+         - name: iOS cross-compile check
+           run: cargo clippy --target aarch64-apple-ios -- -D warnings
          - name: Test
            run: cargo test
 
