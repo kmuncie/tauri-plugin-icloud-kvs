@@ -27,10 +27,13 @@ app (marketing angle). No production-quality alternative exists as of July
 - **Value model: JSON values**, mapped to KVS's native plist types. No
   bytes API in v1 (YAGNI; raw `Data` written by other native code is
   returned as base64 — documented edge case).
-- **macOS implementation: pure Rust via `objc2-foundation`** (which ships
-  `NSUbiquitousKeyValueStore` bindings). No Xcode/Swift toolchain required
-  for desktop consumers. The iOS half is Swift, as Tauri 2 mobile plugins
-  require. The shallow ~100-line duplication is accepted.
+- **Implementation: pure Rust via `objc2-foundation`** (which ships
+  `NSUbiquitousKeyValueStore` bindings) **on both macOS and iOS**. No
+  Xcode/Swift toolchain required. *Correction (found during M1.3):*
+  the brainstorm assumed Tauri 2 mobile plugins require a Swift half;
+  they don't — Swift is only needed for lifecycle hooks or APIs Rust
+  cannot reach. The single objc2 implementation compiles for iOS, so
+  the accepted ~100-line Swift duplication never materialized.
 - **Home & names:** GitHub `kmuncie/tauri-plugin-icloud-kvs`, crate
   `tauri-plugin-icloud-kvs`, npm `tauri-plugin-icloud-kvs-api`.
 - **License: MIT/Apache-2.0 dual** (community standard; explicitly not
@@ -48,12 +51,10 @@ Standard Tauri 2 plugin structure (from the official plugin template):
 kmuncie/tauri-plugin-icloud-kvs
 ├── src/                  # Rust: plugin init, desktop impl, command defs
 │   ├── lib.rs            # plugin builder, #[cfg] platform dispatch
-│   ├── desktop.rs        # macOS via objc2-foundation; non-Apple → error
-│   ├── mobile.rs         # bridges to Swift via tauri::plugin::PluginHandle
+│   ├── store.rs          # macOS+iOS via objc2-foundation; non-Apple → error
 │   ├── commands.rs       # #[tauri::command] wrappers
 │   ├── models.rs         # serde types (ChangeEvent, AccountStatus, …)
 │   └── error.rs          # thiserror-based Error enum
-├── ios/                  # Swift package: NSUbiquitousKeyValueStore impl
 ├── guest-js/             # TypeScript API → npm tauri-plugin-icloud-kvs-api
 ├── permissions/          # Tauri capability definitions per command
 ├── examples/demo-app/    # KV editor + live change-event log
@@ -110,17 +111,13 @@ NSDictionary). `null` is not a storable value — use `remove`.
 
 ## Architecture & data flow
 
-- **macOS (`desktop.rs`):** `NSUbiquitousKeyValueStore::defaultStore()` via
+- **macOS & iOS (`store.rs`):** `NSUbiquitousKeyValueStore::defaultStore()` via
   `objc2-foundation`, main-thread dispatch where required. An
   `NSNotificationCenter` observer for
   `NSUbiquitousKeyValueStoreDidChangeExternallyNotification` converts the
   notification's userInfo (change-reason code + changed-key list) into the
   `ChangeEvent` payload and emits it as the Tauri event
   `icloud-kvs://external-change`.
-- **iOS (`ios/`, Swift):** identical logic in Swift via Tauri 2's mobile
-  plugin system; events surface through the plugin `trigger` mechanism
-  under the same event name and payload shape, so frontend code is
-  platform-agnostic.
 - **Other platforms:** every command returns `Error::UnsupportedPlatform`.
 - The plugin is stateless beyond the notification observer; KVS itself is
   the store. No caching layer.

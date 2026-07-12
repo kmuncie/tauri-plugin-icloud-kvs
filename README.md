@@ -18,10 +18,10 @@ plugin powers its cross-device config sync.
 | Platform | Support |
 |----------|---------|
 | macOS    | ✅ Supported (pure Rust via `objc2`, no Swift toolchain needed) |
-| iOS      | Planned (Swift) |
+| iOS      | ✅ Supported (same pure-Rust implementation as macOS) |
 | Others   | Commands return an `UnsupportedPlatform` error |
 
-## Usage (macOS, pre-release)
+## Usage (pre-release)
 
 Register the plugin and allow its commands in your capability file:
 
