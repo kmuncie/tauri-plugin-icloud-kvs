@@ -10,6 +10,30 @@
 
 **Spec:** `docs/design-spec.md` (amended by Task 4). Milestone definition: `docs/milestones.md` (M1.3 entry).
 
+## Status (paused 2026-07-12)
+
+Tasks 1–4 and Task 5 Step 1 are **done and pushed**; CI run 29213159307 is
+green including the new "iOS cross-compile check" step. Remaining: Task 5
+Steps 2–4 (simulator checkpoint + milestone close-out), **blocked on Kevin
+installing full Xcode** (his machine has only the Command Line Tools, which
+lack the iOS SDK — see `DEVELOPERS.md` "iOS verification").
+
+Deviations from the plan as written:
+
+- Task 2 Step 1/5: the `cargo tree … | grep objc2` check needs `--depth 1`
+  — tauri itself pulls objc2 crates transitively on iOS, so the plan's
+  "no output before the change" expectation only holds for direct deps.
+- Task 2 Step 5 / Task 3 Step 2: `cargo clippy --target aarch64-apple-ios`
+  cannot run locally without full Xcode (dependency build scripts compile C
+  against the iOS SDK). Verification was done by CI instead (the Step 5
+  contingency), and the Xcode requirement is documented in `DEVELOPERS.md`.
+- `Cargo.lock` is gitignored in this repo, so it was not committed.
+
+Pickup: install Xcode → run Task 5 Step 2's protocol (in `DEVELOPERS.md`)
+→ Steps 3–4. Optional idea discussed with Kevin: pull the M1.5 example app
+(`examples/demo-app`) forward and use it as the checkpoint host app instead
+of a throwaway scratch app.
+
 ## Global Constraints
 
 - Rust 1.89.0, edition 2024; 3-space indent; `rustfmt.toml` / `.cargo/config.toml` already in repo — do not modify
@@ -35,18 +59,18 @@ The module is about to serve iOS too, so "desktop" becomes a misnomer. Pure rena
 - Consumes: existing `desktop::{account_status, get, get_all, keys, remove, set, synchronize}`.
 - Produces: the same seven functions re-exported from `store::…`; the crate-root `pub use` (what `commands.rs` and `tests/kvs_roundtrip.rs` call) is unchanged, so nothing else moves.
 
-- [ ] **Step 1: Verify green baseline**
+- [x] **Step 1: Verify green baseline**
 
 Run: `cargo test && cargo lint-clippy && cargo lint-fmt`
 Expected: PASS (this is the pre-change baseline; if it fails, stop and report).
 
-- [ ] **Step 2: Move the file**
+- [x] **Step 2: Move the file**
 
 ```bash
 git mv src/desktop.rs src/store.rs
 ```
 
-- [ ] **Step 3: Update `src/lib.rs`**
+- [x] **Step 3: Update `src/lib.rs`**
 
 Change line 17:
 
@@ -64,12 +88,12 @@ pub use store::{account_status, get, get_all, keys, remove, set, synchronize};
 
 (was `pub use desktop::{…};` — same list.)
 
-- [ ] **Step 4: Run everything to verify the rename is complete**
+- [x] **Step 4: Run everything to verify the rename is complete**
 
 Run: `cargo test && cargo lint-clippy && cargo lint-fmt`
 Expected: PASS, identical test counts to Step 1.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/store.rs src/lib.rs
@@ -91,12 +115,12 @@ Widen the dependency target and every cfg gate from macOS-only to macOS+iOS, and
 - Consumes: `store.rs` / `conversion.rs` from Task 1 (unchanged logic).
 - Produces: on `target_os = "ios"` the real `NSUbiquitousKeyValueStore` implementation compiles instead of the `UnsupportedPlatform` fallback. Task 3's CI step and Task 5's simulator checkpoint rely on this. Public API signatures unchanged.
 
-- [ ] **Step 1: Capture the failing "test" — iOS currently gets the stub**
+- [x] **Step 1: Capture the failing "test" — iOS currently gets the stub**
 
 Run: `cargo tree --target aarch64-apple-ios -p tauri-plugin-icloud-kvs | grep objc2`
 Expected: **no output** (exit code 1) — proving the objc2 implementation is not part of the iOS build today. (`cargo tree` works without the target toolchain installed.)
 
-- [ ] **Step 2: Install the iOS targets and declare them in `rust-toolchain.toml`**
+- [x] **Step 2: Install the iOS targets and declare them in `rust-toolchain.toml`**
 
 ```bash
 rustup target add aarch64-apple-ios aarch64-apple-ios-sim
@@ -113,7 +137,7 @@ targets = [
 
 (Declaring them means fresh `rustup toolchain install` runs — including CI's — pull them automatically.)
 
-- [ ] **Step 3: Widen the dependency target in `Cargo.toml`**
+- [x] **Step 3: Widen the dependency target in `Cargo.toml`**
 
 Change line 21 from:
 
@@ -129,7 +153,7 @@ to:
 
 (The `objc2` / `objc2-foundation` entries below it are unchanged — same exact pins, same feature list; every enabled Foundation API is available on iOS: `NSUbiquitousKeyValueStore` since iOS 5, `ubiquityIdentityToken` since iOS 6.)
 
-- [ ] **Step 4: Widen the cfg gates**
+- [x] **Step 4: Widen the cfg gates**
 
 `src/lib.rs` line 15, change:
 
@@ -170,7 +194,7 @@ mod imp {
 
 (was `…for the macOS implementation.`)
 
-- [ ] **Step 5: Verify the iOS build now contains the real implementation**
+- [x] **Step 5: Verify the iOS build now contains the real implementation**
 
 Run: `cargo tree --target aarch64-apple-ios -p tauri-plugin-icloud-kvs | grep objc2`
 Expected: `objc2` and `objc2-foundation` lines appear.
@@ -180,12 +204,12 @@ Expected: compiles clean (lib only — deliberately not `--all-targets`; tests n
 
 Contingency: if a transitive dependency's build script demands the iOS SDK, confirm Xcode provides it (`xcodebuild -showsdks | grep iphoneos`) — the plan assumes a full Xcode install, which CI's macOS runners have.
 
-- [ ] **Step 6: Verify the host build is untouched**
+- [x] **Step 6: Verify the host build is untouched**
 
 Run: `cargo test && cargo lint-clippy && cargo lint-fmt`
 Expected: PASS, same test counts as Task 1.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add Cargo.toml rust-toolchain.toml src/lib.rs src/store.rs src/conversion.rs
@@ -203,7 +227,7 @@ git commit -m "feat: Enable the shared objc2 KVS implementation on iOS"
 - Consumes: rustup targets from Task 2 (`rust-toolchain.toml` makes CI's `rustup toolchain install` fetch them).
 - Produces: a required CI step that fails the build if the plugin stops compiling for iOS. (Push + watch happens in Task 5 so CI is verified once, after the docs land.)
 
-- [ ] **Step 1: Add the step to the rust job**
+- [x] **Step 1: Add the step to the rust job**
 
 In `.github/workflows/ci.yml`, after the `Lint` step and before `Test`, insert:
 
@@ -214,12 +238,12 @@ In `.github/workflows/ci.yml`, after the `Lint` step and before `Test`, insert:
 
 (3-space YAML indent matching the file; runner already has Xcode + the toolchain step installs the targets declared in `rust-toolchain.toml`.)
 
-- [ ] **Step 2: Verify the exact command locally**
+- [x] **Step 2: Verify the exact command locally**
 
 Run: `cargo clippy --target aarch64-apple-ios -- -D warnings`
 Expected: clean (cached from Task 2).
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add .github/workflows/ci.yml
@@ -237,7 +261,7 @@ git commit -m "ci: Add iOS cross-compile clippy check"
 - Consumes: everything above.
 - Produces: consumer- and contributor-facing docs matching reality; the spec no longer claims a Swift iOS half.
 
-- [ ] **Step 1: Update `README.md`**
+- [x] **Step 1: Update `README.md`**
 
 Platform table (line 21), change:
 
@@ -255,7 +279,7 @@ Usage heading (line 24), change:
 
 (was `## Usage (macOS, pre-release)`; the body already applies to both platforms.)
 
-- [ ] **Step 2: Add an iOS section to `DEVELOPERS.md`**
+- [x] **Step 2: Add an iOS section to `DEVELOPERS.md`**
 
 Insert after the "Integration test: `tests/kvs_roundtrip.rs`" section (before "## Planning"):
 
@@ -281,7 +305,7 @@ to the Team Times integration (~M1.5), per the testing policy:
 contributors never need entitled hardware.
 ```
 
-- [ ] **Step 3: Amend `docs/design-spec.md`**
+- [x] **Step 3: Amend `docs/design-spec.md`**
 
 **(a)** In "Decisions (settled during brainstorming)", replace the bullet:
 
@@ -334,12 +358,12 @@ and delete the line:
 
 (Leave "Alternatives considered" untouched — it is a historical record.)
 
-- [ ] **Step 4: Full local verification**
+- [x] **Step 4: Full local verification**
 
 Run: `cargo test && cargo lint-clippy && cargo lint-fmt`
 Expected: green (docs-only change; guards against stray edits).
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add README.md DEVELOPERS.md docs/design-spec.md
@@ -356,7 +380,7 @@ git commit -m "docs: Document shared pure-Rust iOS support"
 **Interfaces:**
 - Consumes: all prior tasks; CI workflow from Task 3.
 
-- [ ] **Step 1: Push and watch CI**
+- [x] **Step 1: Push and watch CI**
 
 ```bash
 git push

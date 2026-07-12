@@ -81,9 +81,16 @@ Neither covers `NSUbiquitousKeyValueStore`, and neither supports macOS.
   once before the 0.1.0 publish/announce. M1.1-review carryovers
   (permissions/ dir timing, error-test backfill, `Error::Platform`
   rename) all landed during implementation.
-- [ ] **M1.3 — iOS implementation.** Same API via Swift mobile plugin;
-  verified in the iOS simulator/device against the same iCloud container as
-  the Mac build.
+- [ ] **M1.3 — iOS implementation.** *In progress (paused 2026-07-12).*
+  Same API on iOS by sharing the macOS objc2 implementation — the spec's
+  premise that Tauri 2 requires a Swift half was wrong and has been
+  corrected in the design spec. Implementation, CI cross-compile check
+  (`cargo clippy --target aarch64-apple-ios`), and docs are done and green
+  on main (plan: `docs/plans/m1-3-ios-implementation.md`). **Remaining:**
+  manual simulator verification per `DEVELOPERS.md` "iOS verification" —
+  blocked on installing full Xcode — then check this box. Cross-device
+  sync against the Mac build stays deferred to Team Times integration
+  (~M1.5).
 - [ ] **M1.4 — Change events.** External-change notifications emitted as
   Tauri events on both platforms; live-update behavior demonstrated via
   Team Times (or the example app) rather than a dedicated two-device rig.
