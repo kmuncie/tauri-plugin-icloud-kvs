@@ -1,4 +1,4 @@
-//! JSON ↔ property-list conversion for the macOS implementation.
+//! JSON ↔ property-list conversion for the Apple-platform implementation.
 //!
 //! Storable values map 1:1 onto plist types (NSString, NSNumber,
 //! NSArray, NSDictionary). `null` is not storable. Raw `NSData` written

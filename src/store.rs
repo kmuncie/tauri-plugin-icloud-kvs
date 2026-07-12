@@ -1,8 +1,8 @@
-//! Desktop implementation. macOS talks to `NSUbiquitousKeyValueStore`
-//! via objc2-foundation; other desktop platforms return
-//! `Error::UnsupportedPlatform` from every operation.
+//! Store operations. Apple platforms (macOS and iOS) talk to
+//! `NSUbiquitousKeyValueStore` via objc2-foundation; all other
+//! platforms return `Error::UnsupportedPlatform` from every operation.
 
-#[cfg(target_os = "macos")]
+#[cfg(any(target_os = "macos", target_os = "ios"))]
 mod imp {
    use objc2_foundation::{NSFileManager, NSString, NSUbiquitousKeyValueStore};
    use serde_json::{Map, Value};
@@ -86,7 +86,7 @@ mod imp {
    }
 }
 
-#[cfg(not(target_os = "macos"))]
+#[cfg(not(any(target_os = "macos", target_os = "ios")))]
 mod imp {
    use serde_json::{Map, Value};
 

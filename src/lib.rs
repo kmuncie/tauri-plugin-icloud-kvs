@@ -12,7 +12,7 @@
 //! ```
 
 mod commands;
-#[cfg(target_os = "macos")]
+#[cfg(any(target_os = "macos", target_os = "ios"))]
 mod conversion;
 mod error;
 mod models;

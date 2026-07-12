@@ -4,3 +4,7 @@ components = [
    "rustfmt",
    "clippy"
 ]
+targets = [
+   "aarch64-apple-ios",
+   "aarch64-apple-ios-sim"
+]
