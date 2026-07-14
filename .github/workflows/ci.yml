@@ -30,3 +30,25 @@ jobs:
          - name: Build guest bindings
            run: npm ci && npm run build
            working-directory: guest-js
+
+   demo-app:
+      runs-on: macos-14
+      steps:
+         - uses: actions/checkout@v5
+         - name: Install toolchain from rust-toolchain.toml
+           run: rustup show active-toolchain || rustup toolchain install
+         - uses: Swatinem/rust-cache@v2
+           with:
+              workspaces: examples/demo-app/src-tauri
+         - uses: actions/setup-node@v5
+           with:
+              node-version-file: .nvmrc
+         - name: Build guest bindings
+           run: npm ci && npm run build
+           working-directory: guest-js
+         - name: Build demo frontend
+           run: npm ci && npm run build
+           working-directory: examples/demo-app
+         - name: Check demo Rust crate
+           run: cargo check
+           working-directory: examples/demo-app/src-tauri
