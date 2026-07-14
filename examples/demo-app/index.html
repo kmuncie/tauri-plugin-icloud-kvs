@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>iCloud KVS Demo</title>
+      <link rel="stylesheet" href="/src/styles.css" />
+   </head>
+   <body>
+      <header>
+         <h1>iCloud KVS Demo</h1>
+         <span id="account-status" class="badge">checking…</span>
+         <button id="synchronize">Synchronize</button>
+         <span id="sync-result"></span>
+      </header>
+
+      <div id="error-bar" hidden></div>
+
+      <main>
+         <section id="editor-pane">
+            <h2>Key-Value Store</h2>
+            <form id="kv-form">
+               <input id="kv-key" placeholder="key" autocomplete="off" />
+               <textarea id="kv-value" rows="3"
+                  placeholder="value — parsed as JSON, else stored as a string"></textarea>
+               <div class="form-actions">
+                  <button type="submit">Set</button>
+                  <button type="button" id="refresh">Refresh</button>
+               </div>
+            </form>
+            <table id="kv-table">
+               <thead>
+                  <tr><th>Key</th><th>Value</th><th></th></tr>
+               </thead>
+               <tbody></tbody>
+            </table>
+         </section>
+
+         <section id="event-pane">
+            <h2>External Changes</h2>
+            <p class="placeholder">
+               Live external-change events land in M1.4. This pane will list
+               each change with its reason (serverChange, initialSync,
+               quotaViolation, accountChange) and the affected keys.
+            </p>
+         </section>
+      </main>
+
+      <script type="module" src="/src/main.ts"></script>
+   </body>
+</html>

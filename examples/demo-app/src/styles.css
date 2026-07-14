@@ -1,0 +1,96 @@
+:root {
+   font-family: system-ui, sans-serif;
+   color-scheme: light dark;
+}
+
+body {
+   margin: 0;
+   padding: 1rem;
+}
+
+header {
+   display: flex;
+   align-items: center;
+   gap: 0.75rem;
+}
+
+header h1 {
+   font-size: 1.25rem;
+   margin: 0 auto 0 0;
+}
+
+.badge {
+   padding: 0.15rem 0.6rem;
+   border-radius: 999px;
+   background: #8884;
+   font-size: 0.85rem;
+}
+
+.badge.available {
+   background: #2a24;
+}
+
+.badge.no-account {
+   background: #a224;
+}
+
+#error-bar {
+   margin-top: 0.75rem;
+   padding: 0.5rem 0.75rem;
+   border-radius: 6px;
+   background: #a224;
+   font-family: ui-monospace, monospace;
+   font-size: 0.85rem;
+}
+
+main {
+   display: grid;
+   grid-template-columns: 3fr 2fr;
+   gap: 1.5rem;
+   margin-top: 1rem;
+}
+
+#kv-form {
+   display: grid;
+   gap: 0.5rem;
+   margin-bottom: 1rem;
+}
+
+#kv-form input,
+#kv-form textarea {
+   font-family: ui-monospace, monospace;
+   padding: 0.4rem;
+}
+
+.form-actions {
+   display: flex;
+   gap: 0.5rem;
+}
+
+#kv-table {
+   width: 100%;
+   border-collapse: collapse;
+}
+
+#kv-table th,
+#kv-table td {
+   text-align: left;
+   padding: 0.35rem 0.5rem;
+   border-bottom: 1px solid #8883;
+   vertical-align: top;
+}
+
+#kv-table td.value {
+   font-family: ui-monospace, monospace;
+   white-space: pre-wrap;
+   word-break: break-word;
+}
+
+#kv-table tbody tr {
+   cursor: pointer;
+}
+
+.placeholder {
+   color: #888;
+   font-style: italic;
+}
