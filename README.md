@@ -48,6 +48,10 @@ inert — writes silently no-op. With the entitlement but signed out of
 iCloud, the store works locally but never syncs; use
 `accountStatus()` to detect the signed-out case.
 
+A runnable example lives in
+[`examples/demo-app`](examples/demo-app/README.md) — a key-value editor
+that doubles as the plugin's manual test rig.
+
 ## What iCloud KVS gives you (and its limits)
 
 - 1 MB total per app, max 1024 keys, key names ≤ 64 bytes UTF-8

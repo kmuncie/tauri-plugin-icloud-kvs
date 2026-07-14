@@ -27,8 +27,8 @@ CI only runs the non-store-dependent unit/integration tests (see
 "Integration test" below); real iCloud sync needs signed, entitled app
 bundles on two devices with the same Apple ID. Protocol:
 
-1. Build a scratch Tauri app (or, once it exists, `examples/demo-app`)
-   that registers this plugin, with the
+1. Build `examples/demo-app` (see its README for signing) — it registers
+   this plugin, with the
    `com.apple.developer.ubiquity-kvstore-identifier` entitlement set to
    `$(TeamIdentifierPrefix)$(CFBundleIdentifier)` and codesigned with a
    Development certificate on both Macs.
@@ -63,8 +63,8 @@ only the macOS SDK, and dependency build scripts compile C against
 the iOS SDK) — without it, rely on CI. Exercising the commands needs
 a host app in the simulator:
 
-1. Create a scratch Tauri app, register this plugin as a path
-   dependency, and run `tauri ios init`.
+1. In `examples/demo-app`, run `npm run tauri ios init` (see its
+   README).
 2. In the generated Xcode project, add the iCloud capability with
    "Key-value storage" checked (this sets the
    `com.apple.developer.ubiquity-kvstore-identifier` entitlement).
