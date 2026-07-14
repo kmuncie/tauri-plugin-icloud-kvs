@@ -1,0 +1,18 @@
+[package]
+name = "demo-app"
+version = "0.1.0"
+description = "Demo app and manual test rig for tauri-plugin-icloud-kvs"
+edition = "2024"
+rust-version = "1.89.0"
+publish = false
+
+[lib]
+name = "demo_app_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2.6.3", features = [] }
+
+[dependencies]
+tauri = { version = "2.11.5", features = [] }
+tauri-plugin-icloud-kvs = { path = "../../.." }

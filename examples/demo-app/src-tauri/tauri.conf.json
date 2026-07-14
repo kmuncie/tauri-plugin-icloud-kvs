@@ -1,0 +1,32 @@
+{
+   "$schema": "https://schema.tauri.app/config/2",
+   "productName": "icloud-kvs-demo",
+   "version": "0.1.0",
+   "identifier": "com.kmuncie.icloud-kvs-demo",
+   "build": {
+      "beforeDevCommand": "npm run dev",
+      "devUrl": "http://localhost:1420",
+      "beforeBuildCommand": "npm run build",
+      "frontendDist": "../dist"
+   },
+   "app": {
+      "windows": [
+         {
+            "title": "iCloud KVS Demo",
+            "width": 960,
+            "height": 680
+         }
+      ],
+      "security": {
+         "csp": null
+      }
+   },
+   "bundle": {
+      "active": true,
+      "targets": ["app"],
+      "icon": ["icons/icon.png"],
+      "macOS": {
+         "entitlements": "./entitlements.plist"
+      }
+   }
+}

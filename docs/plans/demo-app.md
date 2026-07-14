@@ -15,7 +15,7 @@
 - Rust 1.89.0, edition 2024, 3-space indent everywhere (Rust, TS, JSON, YAML, HTML, CSS)
 - All new dependencies pinned to exact semver versions (resolve with `npm view <pkg> version` before writing them; placeholders below are marked `<PIN>`)
 - `@tauri-apps/api` must match guest-js's pin: **2.11.1**; Rust `tauri = "2.11.5"`, `tauri-build = "2.6.3"`, `serde_json = "1.0.150"` (same pins as the plugin)
-- Plugin consumed by path only: Rust `{ path = "../.." }`, npm `"file:../../guest-js"`
+- Plugin consumed by path only: Rust `{ path = "../../.." }` (from `src-tauri/`), npm `"file:../../guest-js"` (from the app root)
 - Signing identity/team is never committed; entitlements file is committed
 - Demo app is NOT a cargo workspace member of the plugin — its `src-tauri` is a standalone crate (the plugin repo has no workspace, so no `exclude` needed; just never add one)
 - Every commit: plugin-root `cargo test && cargo lint-clippy && cargo lint-fmt` stays green (the demo app doesn't affect it, but guards stray edits); demo-app checks per task
@@ -62,7 +62,7 @@ tauri-build = { version = "2.6.3", features = [] }
 
 [dependencies]
 tauri = { version = "2.11.5", features = [] }
-tauri-plugin-icloud-kvs = { path = "../.." }
+tauri-plugin-icloud-kvs = { path = "../../.." }
 ```
 
 - [ ] **Step 3: Create `examples/demo-app/src-tauri/build.rs`**
