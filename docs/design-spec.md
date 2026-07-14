@@ -181,8 +181,9 @@ Rust documentation standards, the README is not inlined into rustdoc).
   skeleton, this spec moved in.
 - [ ] **M1.2 — macOS implementation.** Full command set working via
   `objc2`; unit + integration tests green.
-- [ ] **M1.3 — iOS implementation.** Same API via Swift; verified in
-  simulator/device against the same iCloud container as the Mac build.
+- [x] **M1.3 — iOS implementation.** Same API on iOS (shared pure-Rust
+  implementation; see the corrected decision above); verified in the
+  iOS simulator via the demo app.
 - [ ] **M1.4 — Change events.** External-change notifications on both
   platforms; two-device live-update demo works.
 - [ ] **M1.5 — Polish + publish.** TS bindings finalized, example app,

@@ -10,13 +10,17 @@
 
 **Spec:** `docs/design-spec.md` (amended by Task 4). Milestone definition: `docs/milestones.md` (M1.3 entry).
 
-## Status (paused 2026-07-12)
+## Status (completed 2026-07-13)
 
-Tasks 1–4 and Task 5 Step 1 are **done and pushed**; CI run 29213159307 is
-green including the new "iOS cross-compile check" step. Remaining: Task 5
-Steps 2–4 (simulator checkpoint + milestone close-out), **blocked on Kevin
-installing full Xcode** (his machine has only the Command Line Tools, which
-lack the iOS SDK — see `DEVELOPERS.md` "iOS verification").
+All tasks done. Simulator checkpoint passed 2026-07-13 using
+`examples/demo-app` (built ahead of schedule per `docs/demo-app-spec.md`
+instead of a throwaway scratch app): entitled iPhone 17 simulator build,
+functional store round-trips confirmed, `noAccount` local-only mode
+working. The checkpoint prep surfaced and fixed a latent plugin crash
+(NULL `dictionaryRepresentation` in unentitled processes). Local iOS
+builds additionally required full Xcode (stable 26.6 — the Xcode 27 beta
+breaks tauri's swift-rs build) and CocoaPods (`brew install cocoapods`,
+required by `tauri ios init` even for pod-less apps).
 
 Deviations from the plan as written:
 
@@ -389,11 +393,11 @@ gh run watch --repo kmuncie/tauri-plugin-icloud-kvs --exit-status
 
 Expected: latest run `success` on both jobs, including the new "iOS cross-compile check" step. If only that step fails, fix the compile error it reports (the host build being green means it's an iOS-only API difference — check the objc2-foundation docs for the symbol's availability) rather than deleting the step.
 
-- [ ] **Step 2: HUMAN CHECKPOINT — simulator verification**
+- [x] **Step 2: HUMAN CHECKPOINT — simulator verification**
 
 Follow the `DEVELOPERS.md` "iOS verification (manual, simulator)" protocol from Task 4. This needs Kevin's Xcode, simulator, and Apple ID and cannot be done by an agent. **Stop here and report status to Kevin if executing autonomously.** The bar is: commands round-trip in an entitled simulator app; cross-device sync stays deferred.
 
-- [ ] **Step 3: Check off the milestone**
+- [x] **Step 3: Check off the milestone**
 
 After simulator verification passes, in `docs/milestones.md` replace the M1.3 entry with:
 
@@ -409,7 +413,7 @@ After simulator verification passes, in `docs/milestones.md` replace the M1.3 en
 
 and in `docs/design-spec.md`'s Milestones list, change the M1.3 line to `- [x]`.
 
-- [ ] **Step 4: Commit and push**
+- [x] **Step 4: Commit and push**
 
 ```bash
 git add docs/milestones.md docs/design-spec.md

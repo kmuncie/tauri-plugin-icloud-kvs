@@ -38,9 +38,14 @@ npm run tauri dev
 npm run tauri ios init   # once; generates src-tauri/gen/apple (gitignored)
 ```
 
-Open the generated project in Xcode, select your team under
-Signing & Capabilities, add the **iCloud** capability with
-**Key-value storage** checked, then:
+Open `src-tauri/gen/apple/demo-app.xcodeproj` in Xcode, select your team
+under Signing & Capabilities (target **demo-app_iOS**), add the
+**iCloud** capability with **Key-value storage** checked, then:
+
+> Prerequisites: full Xcode and CocoaPods (`brew install cocoapods`) —
+> Tauri's iOS project generation requires the `pod` binary even though
+> this app declares no pods. The iCloud capability requires a paid Apple
+> Developer Program team.
 
 ```sh
 npm run tauri ios dev
