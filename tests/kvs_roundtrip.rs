@@ -47,6 +47,15 @@ fn round_trips_set_get_keys_get_all_remove() {
 }
 
 #[test]
+fn keys_and_get_all_work_without_entitlement() {
+   // An unentitled process gets an inert store whose
+   // `dictionaryRepresentation` is NULL at runtime (despite the non-null
+   // declaration). These must return empty, not panic.
+   assert_eq!(kvs::keys().unwrap(), Vec::<String>::new());
+   assert!(kvs::get_all().unwrap().is_empty());
+}
+
+#[test]
 fn missing_key_is_none_not_error() {
    assert_eq!(kvs::get("m12-never-written").unwrap(), None);
 }

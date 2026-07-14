@@ -4,13 +4,26 @@
 
 #[cfg(any(target_os = "macos", target_os = "ios"))]
 mod imp {
-   use objc2_foundation::{NSFileManager, NSString, NSUbiquitousKeyValueStore};
+   use objc2::msg_send;
+   use objc2::rc::Retained;
+   use objc2::runtime::AnyObject;
+   use objc2_foundation::{NSDictionary, NSFileManager, NSString, NSUbiquitousKeyValueStore};
    use serde_json::{Map, Value};
 
    use crate::conversion::{json_to_plist, plist_to_json};
    use crate::error::Result;
    use crate::models::AccountStatus;
    use crate::validation::{validate_key, validate_value};
+
+   /// `dictionaryRepresentation` is declared non-null, but a process
+   /// without the ubiquity-kvstore entitlement gets an inert store that
+   /// returns NULL at runtime — the generated objc2 binding panics on
+   /// that. Call it nil-tolerantly and treat NULL as an empty store.
+   fn dictionary_representation(
+      store: &NSUbiquitousKeyValueStore,
+   ) -> Option<Retained<NSDictionary<NSString, AnyObject>>> {
+      unsafe { msg_send![store, dictionaryRepresentation] }
+   }
 
    pub fn get(key: &str) -> Result<Option<Value>> {
       validate_key(key)?;
@@ -54,14 +67,18 @@ mod imp {
 
    pub fn keys() -> Result<Vec<String>> {
       let store = NSUbiquitousKeyValueStore::defaultStore();
-      let dict = store.dictionaryRepresentation();
+      let Some(dict) = dictionary_representation(&store) else {
+         return Ok(Vec::new());
+      };
 
       Ok(dict.keys().map(|k| k.to_string()).collect())
    }
 
    pub fn get_all() -> Result<Map<String, Value>> {
       let store = NSUbiquitousKeyValueStore::defaultStore();
-      let dict = store.dictionaryRepresentation();
+      let Some(dict) = dictionary_representation(&store) else {
+         return Ok(Map::new());
+      };
       let (dict_keys, dict_values) = dict.to_vecs();
       let mut map = Map::with_capacity(dict_keys.len());
 
