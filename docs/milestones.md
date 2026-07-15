@@ -92,12 +92,18 @@ Neither covers `NSUbiquitousKeyValueStore`, and neither supports macOS.
   `keys()`/`get_all()` panicked on the NULL `dictionaryRepresentation`
   every unentitled process gets. Cross-device sync against the Mac
   build stays deferred to Team Times integration (~M1.5).
-- [ ] **M1.4 — Change events.** External-change notifications emitted as
-  Tauri events on both platforms; live-update behavior demonstrated via
-  Team Times (or the example app) rather than a dedicated two-device rig.
-  Carryover from M1.2 review: handle or document foreign `NSDate` values
-  in `plist_to_json` (currently one foreign NSDate fails all of
-  `get_all`).
+- [x] **M1.4 — Change events.** External-change notifications emitted as
+  Tauri events (`icloud-kvs://external-change`) on both platforms: an
+  always-on `NSNotificationCenter` observer registered at plugin setup,
+  with pure, unit-tested notification parsing (unknown future reason
+  codes drop the event rather than mis-label it). `onExternalChange()`
+  added to the guest bindings, and the demo app's placeholder pane
+  replaced with a live event log that also refreshes the KV table. The
+  M1.2-review carryover landed too: foreign `NSDate` values now read
+  back as ISO-8601 UTC strings instead of failing all of `get_all`.
+  Live two-device event delivery follows the protocol in
+  `DEVELOPERS.md` (step 5) and stays deferred to Team Times
+  integration (~M1.5), per the testing policy.
 - [ ] **M1.5 — Polish + publish.** TypeScript bindings finalized, example
   app, entitlement/provisioning docs, publish to crates.io + npm, announce
   (Tauri Discord, awesome-tauri PR). Carried over from the M1.1 review: the

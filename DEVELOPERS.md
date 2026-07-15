@@ -36,6 +36,13 @@ bundles on two devices with the same Apple ID. Protocol:
 3. On Mac B: poll `get('sync-check')` (KVS latency is seconds to
    minutes; no guarantees). The value arriving proves upload + download.
 4. Repeat in the reverse direction.
+5. Change events: with the demo app open on Mac B, run
+   `set('sync-check', <new value>)` on Mac A. Mac B's "External
+   Changes" pane must log a `serverChange` event listing `sync-check`
+   within the same latency window, and its KV table must refresh to
+   the new value without user action. Note: the OS only delivers these
+   notifications to processes that called `synchronize()` once after
+   launch — the plugin does this automatically at setup.
 
 `accountStatus()` must report `available` on both machines first.
 

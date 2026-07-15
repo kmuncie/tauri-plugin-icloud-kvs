@@ -184,7 +184,7 @@ Rust documentation standards, the README is not inlined into rustdoc).
 - [x] **M1.3 — iOS implementation.** Same API on iOS (shared pure-Rust
   implementation; see the corrected decision above); verified in the
   iOS simulator via the demo app.
-- [ ] **M1.4 — Change events.** External-change notifications on both
+- [x] **M1.4 — Change events.** External-change notifications on both
   platforms; two-device live-update demo works.
 - [ ] **M1.5 — Polish + publish.** TS bindings finalized, example app,
   entitlement docs, publish to crates.io + npm, announce (Tauri Discord,

@@ -35,10 +35,15 @@ tauri::Builder::default()
 ```
 
 ```ts
-import { set, get } from 'tauri-plugin-icloud-kvs-api';
+import { set, get, onExternalChange } from 'tauri-plugin-icloud-kvs-api';
 
 await set('theme', { mode: 'dark', accent: 'teal' });
 const theme = await get('theme');
+
+const unlisten = await onExternalChange((event) => {
+   // event.reason: 'serverChange' | 'initialSync' | 'quotaViolation' | 'accountChange'
+   // event.changedKeys: string[] (may be empty)
+});
 ```
 
 This plugin requires the
