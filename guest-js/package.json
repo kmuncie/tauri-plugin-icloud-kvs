@@ -5,6 +5,9 @@
    "license": "MIT OR Apache-2.0",
    "repository": "github:kmuncie/tauri-plugin-icloud-kvs",
    "keywords": ["tauri", "tauri-plugin", "icloud", "key-value", "sync", "apple"],
+   "publishConfig": {
+      "tag": "rc"
+   },
    "type": "module",
    "main": "dist/index.js",
    "types": "dist/index.d.ts",

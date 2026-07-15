@@ -100,8 +100,11 @@ gated on Team Times real-device verification.
 3. `cargo login` (token from crates.io/settings/tokens), then
    `cargo publish`.
 4. `cd guest-js && npm login && npm publish --tag rc`.
-   ⚠️ **Never untagged before stable** — the first untagged publish
-   becomes `latest`.
+   ⚠️ **Never untagged before stable** — an untagged publish becomes
+   `latest`. Safety net: `publishConfig.tag` in `guest-js/package.json`
+   is set to `rc`, so even a bare `npm publish` tags correctly. (The
+   0.1.0-rc.1 publish predated this guard and ran untagged; `latest`
+   points at the rc until stable ships. Accepted deviation.)
 5. `git tag v0.1.0-rc.1 && git push --tags`.
 6. Hand the rc coordinates to the consuming app (Team Times) for the
    real-device protocol above. No announcements at rc.
@@ -112,10 +115,11 @@ gated on Team Times real-device verification.
    on real hardware via the protocol above; no open rc-found issues;
    `CHANGELOG.md` gains the `0.1.0` entry.
 2. Bump both versions to `0.1.0`, update the README status note and
-   install snippets (drop `@rc` / `@0.1.0-rc.1` pins), commit,
-   re-run the rehearsals.
-3. `cargo publish`, then `cd guest-js && npm publish` (untagged —
-   this sets `latest`).
+   install snippets (drop `@rc` / `@0.1.0-rc.1` pins), **remove
+   `publishConfig` from `guest-js/package.json`** (so the publish
+   tags `latest`), commit, re-run the rehearsals.
+3. `cargo publish`, then `cd guest-js && npm publish` (now sets
+   `latest`).
 4. `git tag v0.1.0 && git push --tags`.
 5. Announce: post the drafts in `docs/announcements/` (Tauri Discord
    #plugins, awesome-tauri PR).
