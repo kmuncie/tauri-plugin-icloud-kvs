@@ -104,16 +104,24 @@ Neither covers `NSUbiquitousKeyValueStore`, and neither supports macOS.
   Live two-device event delivery follows the protocol in
   `DEVELOPERS.md` (step 5) and stays deferred to Team Times
   integration (~M1.5), per the testing policy.
-- [ ] **M1.5 — Polish + publish.** TypeScript bindings finalized, example
-  app, entitlement/provisioning docs, publish to crates.io + npm, announce
-  (Tauri Discord, awesome-tauri PR). Carried over from the M1.1 review: the
-  npm package's `"files": ["dist"]` won't include the repo-root license
-  texts — copy `LICENSE-*` into `guest-js/` at publish time (e.g. a
-  `prepack` script) so the tarball ships license texts.
+- [ ] **M1.5a — Publish-ready + rc.** Consumer docs finalized
+  (entitlement/signing guide, API reference, quota + gotchas),
+  crates.io/docs.rs metadata, changelog, two-stage publish runbook in
+  `DEVELOPERS.md`, announce drafts in `docs/announcements/`, and
+  `0.1.0-rc.1` published to crates.io and npm (under the `rc`
+  dist-tag; no `latest` tag exists). The M1.1-review carryover landed:
+  `prepack` now ships license texts + README in the npm tarball.
+- [ ] **M1.5b — Stable publish + announce (gated).** After Team Times
+  observes cross-device sync and change events on real hardware
+  against the published rc: publish `0.1.0` (npm untagged → sets
+  `latest`), tag, announce (Tauri Discord, awesome-tauri PR), and bump
+  Team Times to stable. Runbook: `DEVELOPERS.md` "Publishing a
+  release", Stage 2.
 
 ## Definition of done
 
 A third-party Tauri developer can add the plugin from crates.io/npm, follow
 the README to configure entitlements, and have working cross-device KV sync
-without reading the plugin source. Team Times project 2 consumes the
-published plugin (not a path dependency).
+without reading the plugin source. Team Times project 2 verifies
+real-device sync against the published `0.1.0-rc.1`, then consumes the
+published stable `0.1.0` (never a path dependency).
