@@ -2,7 +2,8 @@
 //! (`NSUbiquitousKeyValueStore`) on macOS and iOS.
 //!
 //! Lets a Tauri app sync small data (1 MB total, 1024 keys) across a
-//! user's Apple devices with no server and no user accounts.
+//! user's Apple devices with no server and no user accounts. External
+//! changes arrive as the Tauri event `icloud-kvs://external-change`.
 //!
 //! # Examples
 //!
