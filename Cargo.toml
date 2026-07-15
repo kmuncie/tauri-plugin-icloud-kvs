@@ -1,10 +1,13 @@
 [package]
 name = "tauri-plugin-icloud-kvs"
-version = "0.1.0"
+version = "0.1.0-rc.1"
 description = "Tauri 2 plugin for Apple's iCloud Key-Value Store (NSUbiquitousKeyValueStore) on macOS and iOS"
 authors = ["Kevin Muncie <kevin@kmuncie.com>"]
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/kmuncie/tauri-plugin-icloud-kvs"
+keywords = ["tauri-plugin", "icloud", "key-value", "sync", "apple"]
+categories = ["os::macos-apis", "api-bindings"]
+exclude = ["docs/", "examples/", ".github/"]
 edition = "2024"
 rust-version = "1.89.0"
 links = "tauri-plugin-icloud-kvs"
@@ -38,3 +41,11 @@ objc2-foundation = { version = "0.3.2", features = [
    "NSValue",
    "block2",
 ] }
+
+[package.metadata.docs.rs]
+default-target = "aarch64-apple-darwin"
+targets = [
+   "aarch64-apple-darwin",
+   "aarch64-apple-ios",
+   "x86_64-unknown-linux-gnu",
+]
