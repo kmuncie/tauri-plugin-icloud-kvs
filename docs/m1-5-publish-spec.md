@@ -1,24 +1,33 @@
-# M1.5 Spec — Polish + publish-ready
+# M1.5 Spec — Polish + rc publish
 
-Design agreed 2026-07-14 (Kevin + Claude). This spec covers making
-tauri-plugin-icloud-kvs 0.1.0 fully publish-ready. **The actual
-crates.io/npm publish and announcements are gated** on Team Times
-observing real-device sync (via a path or git dependency on this repo)
-and are executed later via the runbook this effort produces — they are
-explicitly out of scope for the implementation plan.
+Design agreed 2026-07-14 (Kevin + Claude; revised same day from
+"git-dep gating" to an rc pre-release flow). This spec covers making
+tauri-plugin-icloud-kvs fully publish-ready and ends with a **guided
+publish of `0.1.0-rc.1`** to crates.io and npm (Kevin executes the
+publish commands). The **stable `0.1.0` publish and all announcements
+remain gated** on Team Times observing real-device sync, and are
+executed later via the runbook this effort produces.
 
 ## Scope decisions
 
-- **Publish gate:** The milestones' "sync observed on real devices
-  before 0.1.0 publish" holds. Team Times integration is the vehicle:
-  it consumes the plugin as a path/git dependency first, verifies
-  cross-device sync and change events on real hardware, and only then
-  does 0.1.0 ship — after which Team Times switches to the published
-  version. The milestones' definition of done is amended to match
-  (previously it required Team Times to consume the *published*
-  plugin, which was circular with the verification gate).
-- Everything else lands now so the publish itself is a runbook
-  execution, not a work session.
+- **Pre-release flow:** `0.1.0-rc.1` goes to both registries now.
+  Cargo never resolves a pre-release unless a consumer pins it
+  explicitly, and npm publishes it under the `rc` dist-tag (no
+  `latest` tag exists yet), so nothing can pick it up by accident.
+  Team Times consumes the published rc from the real registries —
+  this dissolves the old circularity (the milestones' definition of
+  done required Team Times to consume the *published* plugin, while
+  the publish gate required Team Times verification first) and
+  end-to-end tests the publish pipeline itself.
+- **Publish gate (unchanged for stable):** The milestones' "sync
+  observed on real devices before 0.1.0 publish" holds for the stable
+  release. After Team Times verifies sync + change events on real
+  hardware against the rc, the runbook publishes `0.1.0`, tags it
+  `latest`, announces, and Team Times bumps to the stable version.
+- crates.io versions are permanent (yank-only); the rc staying in the
+  index forever is normal and accepted.
+- rc naming (not beta): the API is feature-complete; this exact code
+  is expected to become 0.1.0 barring a verification blocker.
 
 ## Deliverables
 
@@ -79,10 +88,15 @@ In `Cargo.toml`:
 Verified by `cargo publish --dry-run` and a clean `cargo doc
 --no-deps`.
 
-### 4. CHANGELOG.md + API-surface audit
+### 4. Version bump, CHANGELOG.md + API-surface audit
 
-- `CHANGELOG.md` at the repo root with a 0.1.0 entry (Keep a Changelog
-  format; initial release notes summarizing the full feature set).
+- Version set to `0.1.0-rc.1` in both `Cargo.toml` and
+  `guest-js/package.json` (the demo app's path dependency is
+  unaffected).
+- `CHANGELOG.md` at the repo root with a 0.1.0-rc.1 entry (Keep a
+  Changelog format; initial release notes summarizing the full
+  feature set; the 0.1.0 stable entry is added at stable-publish
+  time per the runbook).
 - A final read-through audit of `guest-js/src/index.ts` and the public
   Rust API for naming/doc-comment consistency. Expected to produce at
   most trivial doc fixes; any behavioral change it surfaces is out of
@@ -90,17 +104,32 @@ Verified by `cargo publish --dry-run` and a clean `cargo doc
 
 ### 5. Publish runbook (DEVELOPERS.md)
 
-New "Publishing a release" section:
+New "Publishing a release" section covering both stages:
+
+**Stage 1 — rc (executed at the end of this effort, guided):**
+
+1. Checklist: all CI checks green; `cargo publish --dry-run` and
+   `npm pack --dry-run` rehearsals pass; version is `0.1.0-rc.1`.
+2. `cargo publish`.
+3. `cd guest-js && npm publish --tag rc` (prepack copies
+   docs/licenses automatically). **Never publish the npm package
+   without a `--tag` until 0.1.0 — the first untagged publish
+   becomes `latest`.**
+4. `git tag v0.1.0-rc.1 && git push --tags`.
+5. Hand the rc coordinates to Team Times for real-device
+   verification. No announcements.
+
+**Stage 2 — stable (gated on Team Times verification):**
 
 1. Gate checklist: Team Times real-device sync + change events
-   observed (per the cross-device protocol); all CI checks green;
-   `CHANGELOG.md` updated.
-2. `cargo publish` (with `--dry-run` rehearsal first).
-3. `cd guest-js && npm publish` (prepack copies docs/licenses
-   automatically; `npm pack --dry-run` rehearsal first).
+   observed (per the cross-device protocol); no open rc-found issues;
+   `CHANGELOG.md` gains the 0.1.0 entry.
+2. Bump both versions to `0.1.0`, commit, re-run rehearsals.
+3. `cargo publish`, then `cd guest-js && npm publish` (untagged —
+   this sets `latest`).
 4. `git tag v0.1.0 && git push --tags`.
 5. Announce: paste the prepared drafts (Discord, awesome-tauri).
-6. Switch Team Times to the published versions.
+6. Bump Team Times to the stable versions.
 
 ### 6. Announce drafts (docs/announcements/)
 
@@ -111,15 +140,17 @@ New "Publishing a release" section:
 
 ### 7. Milestones amendment (docs/milestones.md)
 
-- Definition of done reworded per the scope decision above.
-- M1.5 entry split into "publish-ready" (this effort's deliverables,
-  checked off when they land) and the gated publish/announce itself
-  (checked off after the runbook is executed post-verification).
+- Definition of done reworded per the scope decisions above (Team
+  Times verifies against the published rc, then consumes the
+  published stable).
+- M1.5 entry split into "publish-ready + rc published" (this
+  effort's deliverables) and the gated stable publish/announce
+  (checked off after runbook Stage 2 runs post-verification).
 
 ## Out of scope
 
-- Running `cargo publish` / `npm publish` for real.
-- Posting announcements.
+- The stable `0.1.0` publish (runbook Stage 2).
+- Posting announcements (stable-release time only).
 - Team Times integration work itself.
 - Any new plugin features or API changes.
 
@@ -134,4 +165,7 @@ New "Publishing a release" section:
 - README contains the entitlement guide, quota section, API reference,
   and gotchas — no "coming with the first release" placeholders left.
 - Runbook, changelog, and both announce drafts exist.
-- Nothing has been published.
+- `0.1.0-rc.1` is live on crates.io and on npm under the `rc`
+  dist-tag with no `latest` tag set (guided publish, executed by
+  Kevin at the end of the effort).
+- `0.1.0` stable has NOT been published; nothing announced.
