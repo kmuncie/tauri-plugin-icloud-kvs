@@ -20,7 +20,7 @@ mod store;
 mod validation;
 
 pub use error::{Error, Result};
-pub use models::AccountStatus;
+pub use models::{AccountStatus, ChangeEvent, ChangeReason};
 
 /// The plugin's public Rust API. App frontends running in the webview
 /// should use the guest bindings (TypeScript) instead; this API is for
