@@ -15,6 +15,8 @@ mod commands;
 #[cfg(any(target_os = "macos", target_os = "ios"))]
 mod conversion;
 mod error;
+#[cfg(any(target_os = "macos", target_os = "ios"))]
+mod events;
 mod models;
 mod store;
 mod validation;
@@ -33,6 +35,11 @@ use tauri::{
 };
 
 /// Initializes the iCloud Key-Value Store plugin.
+///
+/// On macOS and iOS this also registers an observer that emits the
+/// `icloud-kvs://external-change` Tauri event whenever another device
+/// (or the OS) changes the store; see `onExternalChange` in the guest
+/// bindings.
 pub fn init<R: Runtime>() -> TauriPlugin<R> {
    Builder::new("icloud-kvs")
       .invoke_handler(tauri::generate_handler![
@@ -44,5 +51,11 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
          commands::synchronize,
          commands::account_status
       ])
+      .setup(|_app, _api| {
+         #[cfg(any(target_os = "macos", target_os = "ios"))]
+         events::register(_app);
+
+         Ok(())
+      })
       .build()
 }
