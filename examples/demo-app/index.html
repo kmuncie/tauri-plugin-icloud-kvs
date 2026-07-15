@@ -38,11 +38,15 @@
 
          <section id="event-pane">
             <h2>External Changes</h2>
-            <p class="placeholder">
-               Live external-change events land in M1.4. This pane will list
-               each change with its reason (serverChange, initialSync,
-               quotaViolation, accountChange) and the affected keys.
+            <div class="form-actions">
+               <button type="button" id="clear-events">Clear</button>
+            </div>
+            <p id="event-empty" class="placeholder">
+               No external changes yet. Change a value from another device
+               (or another signed build of this app on the same Apple ID)
+               and the event will appear here with its reason and keys.
             </p>
+            <ul id="event-log"></ul>
          </section>
       </main>
 

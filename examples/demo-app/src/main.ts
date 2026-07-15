@@ -7,9 +7,11 @@
 import {
    accountStatus,
    getAll,
+   onExternalChange,
    remove,
    set,
    synchronize,
+   type ChangeEvent,
    type KvsValue,
 } from 'tauri-plugin-icloud-kvs-api';
 
@@ -21,7 +23,10 @@ const statusBadge = document.querySelector<HTMLSpanElement>('#account-status')!,
       keyInput = document.querySelector<HTMLInputElement>('#kv-key')!,
       valueInput = document.querySelector<HTMLTextAreaElement>('#kv-value')!,
       refreshButton = document.querySelector<HTMLButtonElement>('#refresh')!,
-      tableBody = document.querySelector<HTMLTableSectionElement>('#kv-table tbody')!;
+      tableBody = document.querySelector<HTMLTableSectionElement>('#kv-table tbody')!,
+      eventLog = document.querySelector<HTMLUListElement>('#event-log')!,
+      eventEmpty = document.querySelector<HTMLParagraphElement>('#event-empty')!,
+      clearEventsButton = document.querySelector<HTMLButtonElement>('#clear-events')!;
 
 function showError(err: unknown): void {
    errorBar.textContent = String(err);
@@ -97,6 +102,23 @@ async function refresh(): Promise<void> {
    }
 }
 
+function logChangeEvent(event: ChangeEvent): void {
+   const entry = document.createElement('li'),
+         time = document.createElement('time'),
+         reason = document.createElement('span'),
+         keys = document.createElement('span');
+
+   time.textContent = new Date().toLocaleTimeString();
+   reason.textContent = event.reason;
+   reason.className = `badge reason-${event.reason}`;
+   keys.textContent = event.changedKeys.length > 0 ? event.changedKeys.join(', ') : '(no keys)';
+   keys.className = 'value';
+
+   entry.append(time, reason, keys);
+   eventLog.prepend(entry);
+   eventEmpty.hidden = true;
+}
+
 form.addEventListener('submit', async (event) => {
    event.preventDefault();
    clearError();
@@ -123,6 +145,17 @@ syncButton.addEventListener('click', async () => {
       showError(err);
    }
 });
+
+clearEventsButton.addEventListener('click', () => {
+   eventLog.replaceChildren();
+   eventEmpty.hidden = false;
+});
+
+void onExternalChange((event) => {
+   logChangeEvent(event);
+   // Keep the KV table in sync with what just changed remotely.
+   void refresh();
+}).catch(showError);
 
 window.addEventListener('focus', () => void updateAccountStatus());
 
