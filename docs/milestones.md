@@ -104,13 +104,16 @@ Neither covers `NSUbiquitousKeyValueStore`, and neither supports macOS.
   Live two-device event delivery follows the protocol in
   `DEVELOPERS.md` (step 5) and stays deferred to Team Times
   integration (~M1.5), per the testing policy.
-- [ ] **M1.5a — Publish-ready + rc.** Consumer docs finalized
+- [x] **M1.5a — Publish-ready + rc.** Consumer docs finalized
   (entitlement/signing guide, API reference, quota + gotchas),
   crates.io/docs.rs metadata, changelog, two-stage publish runbook in
   `DEVELOPERS.md`, announce drafts in `docs/announcements/`, and
-  `0.1.0-rc.1` published to crates.io and npm (under the `rc`
-  dist-tag; no `latest` tag exists). The M1.1-review carryover landed:
-  `prepack` now ships license texts + README in the npm tarball.
+  `0.1.0-rc.1` published 2026-07-14 to crates.io and npm. Known
+  deviation (accepted): the npm publish ran untagged, so `latest`
+  points at the rc alongside `rc` — harmless with zero consumers, and
+  it self-corrects when stable 0.1.0 publishes. The M1.1-review
+  carryover landed: `prepack` now ships license texts + README in the
+  npm tarball.
 - [ ] **M1.5b — Stable publish + announce (gated).** After Team Times
   observes cross-device sync and change events on real hardware
   against the published rc: publish `0.1.0` (npm untagged → sets
