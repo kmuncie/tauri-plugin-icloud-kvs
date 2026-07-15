@@ -1,11 +1,9 @@
 /**
  * TypeScript bindings for tauri-plugin-icloud-kvs.
- *
- * `onExternalChange` (change events) is added in a later milestone;
- * everything else in the API surface is available here.
  */
 
 import { invoke } from '@tauri-apps/api/core';
+import { listen, type UnlistenFn } from '@tauri-apps/api/event';
 
 /**
  * A JSON value storable in iCloud KVS. Mapped to native property-list
@@ -78,4 +76,38 @@ export async function synchronize(): Promise<boolean> {
  */
 export async function accountStatus(): Promise<AccountStatus> {
    return await invoke<AccountStatus>('plugin:icloud-kvs|account_status');
+}
+
+/**
+ * Why the OS reported an external change to the store.
+ */
+export type ChangeReason =
+   | 'serverChange'
+   | 'initialSync'
+   | 'quotaViolation'
+   | 'accountChange';
+
+/**
+ * Payload of an external-change notification.
+ */
+export interface ChangeEvent {
+   reason: ChangeReason;
+   /**
+    * Keys whose values changed. Empty when the OS omits the key list
+    * (it may for quota violations and account changes).
+    */
+   changedKeys: string[];
+}
+
+/**
+ * Subscribes to external changes: another device changed a value, the
+ * initial iCloud sync arrived, the store exceeded its quota, or the
+ * iCloud account changed. Returns an unlisten function.
+ */
+export async function onExternalChange(
+   handler: (event: ChangeEvent) => void
+): Promise<UnlistenFn> {
+   return await listen<ChangeEvent>('icloud-kvs://external-change', (event) => {
+      handler(event.payload);
+   });
 }
