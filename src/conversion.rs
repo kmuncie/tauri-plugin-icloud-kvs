@@ -1,15 +1,18 @@
 //! JSON ↔ property-list conversion for the Apple-platform implementation.
 //!
 //! Storable values map 1:1 onto plist types (NSString, NSNumber,
-//! NSArray, NSDictionary). `null` is not storable. Raw `NSData` written
-//! by other native code is returned as a base64 string (documented
-//! edge case; there is no bytes API in v1).
+//! NSArray, NSDictionary). `null` is not storable. Values written by
+//! other native code in plist-only types are converted one-way: raw
+//! `NSData` becomes a base64 string and `NSDate` becomes an ISO-8601
+//! UTC string (documented edge cases; there is no bytes or date API
+//! in v1).
 
 use objc2::encode::Encoding;
 use objc2::rc::Retained;
 use objc2::runtime::AnyObject;
 use objc2_foundation::{
-   NSArray, NSData, NSDataBase64EncodingOptions, NSDictionary, NSNumber, NSString,
+   NSArray, NSData, NSDataBase64EncodingOptions, NSDate, NSDictionary, NSISO8601DateFormatOptions,
+   NSISO8601DateFormatter, NSNumber, NSString,
 };
 use serde_json::{Map, Number, Value};
 
@@ -99,6 +102,17 @@ pub(crate) fn plist_to_json(obj: &AnyObject) -> Result<Value> {
       return Ok(Value::String(base64.to_string()));
    }
 
+   if let Some(date) = obj.downcast_ref::<NSDate>() {
+      let formatter = NSISO8601DateFormatter::new();
+
+      formatter.setFormatOptions(
+         NSISO8601DateFormatOptions::WithInternetDateTime
+            | NSISO8601DateFormatOptions::WithFractionalSeconds,
+      );
+
+      return Ok(Value::String(formatter.stringFromDate(date).to_string()));
+   }
+
    Err(Error::Serialization(format!(
       "unsupported plist type: {:?}",
       obj.class()
@@ -122,7 +136,7 @@ fn number_to_json(n: &NSNumber) -> Result<Value> {
 
 #[cfg(test)]
 mod tests {
-   use objc2_foundation::NSData;
+   use objc2_foundation::{NSData, NSDate};
    use serde_json::json;
 
    use super::*;
@@ -174,5 +188,15 @@ mod tests {
       let data = NSData::with_bytes(&[1, 2, 3]);
 
       assert_eq!(plist_to_json(&data).unwrap(), json!("AQID"));
+   }
+
+   #[test]
+   fn foreign_nsdate_reads_back_as_iso8601_string() {
+      let date = NSDate::dateWithTimeIntervalSince1970(1_752_500_000.5);
+
+      assert_eq!(
+         plist_to_json(&date).unwrap(),
+         json!("2025-07-14T13:33:20.500Z")
+      );
    }
 }
