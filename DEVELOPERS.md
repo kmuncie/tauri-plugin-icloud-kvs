@@ -84,6 +84,43 @@ Cross-device sync against the Mac build (same container) is deferred
 to the Team Times integration (~M1.5), per the testing policy:
 contributors never need entitled hardware.
 
+## Publishing a release
+
+Two stages. Stage 1 (rc) happened with M1.5; Stage 2 (stable) is
+gated on Team Times real-device verification.
+
+### Stage 1 — release candidate
+
+1. Checklist: CI green on `main`; versions are `0.1.0-rc.N` in
+   `Cargo.toml` **and** `guest-js/package.json`; `CHANGELOG.md` has
+   the rc entry.
+2. Rehearse: `cargo publish --dry-run` and
+   `cd guest-js && npm pack --dry-run` (tarball must list `dist/`,
+   `README.md`, both `LICENSE-*` files).
+3. `cargo login` (token from crates.io/settings/tokens), then
+   `cargo publish`.
+4. `cd guest-js && npm login && npm publish --tag rc`.
+   ⚠️ **Never untagged before stable** — the first untagged publish
+   becomes `latest`.
+5. `git tag v0.1.0-rc.1 && git push --tags`.
+6. Hand the rc coordinates to the consuming app (Team Times) for the
+   real-device protocol above. No announcements at rc.
+
+### Stage 2 — stable 0.1.0 (gated)
+
+1. Gate checklist: cross-device sync **and** change events observed
+   on real hardware via the protocol above; no open rc-found issues;
+   `CHANGELOG.md` gains the `0.1.0` entry.
+2. Bump both versions to `0.1.0`, update the README status note and
+   install snippets (drop `@rc` / `@0.1.0-rc.1` pins), commit,
+   re-run the rehearsals.
+3. `cargo publish`, then `cd guest-js && npm publish` (untagged —
+   this sets `latest`).
+4. `git tag v0.1.0 && git push --tags`.
+5. Announce: post the drafts in `docs/announcements/` (Tauri Discord
+   #plugins, awesome-tauri PR).
+6. Bump Team Times to the stable versions.
+
 ## Planning
 
 Design spec and milestone plans live in `docs/`.
