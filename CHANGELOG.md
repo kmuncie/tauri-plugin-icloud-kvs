@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/);
 versioning: [SemVer](https://semver.org/).
 
+## [0.1.0] - 2026-07-20
+
+First stable release. Cross-device sync (bidirectional edits, offline
+catch-up) and external-change event delivery verified on real
+hardware (iPhone + MacBook) against `0.1.0-rc.1`; no changes since
+the rc.
+
 ## [0.1.0-rc.1] - 2026-07-14
 
 Initial release candidate.

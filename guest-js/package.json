@@ -1,13 +1,10 @@
 {
    "name": "tauri-plugin-icloud-kvs-api",
-   "version": "0.1.0-rc.1",
+   "version": "0.1.0",
    "description": "TypeScript bindings for tauri-plugin-icloud-kvs (Apple iCloud Key-Value Store for Tauri 2)",
    "license": "MIT OR Apache-2.0",
    "repository": "github:kmuncie/tauri-plugin-icloud-kvs",
    "keywords": ["tauri", "tauri-plugin", "icloud", "key-value", "sync", "apple"],
-   "publishConfig": {
-      "tag": "rc"
-   },
    "type": "module",
    "main": "dist/index.js",
    "types": "dist/index.d.ts",

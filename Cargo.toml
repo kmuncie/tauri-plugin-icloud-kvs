@@ -1,6 +1,6 @@
 [package]
 name = "tauri-plugin-icloud-kvs"
-version = "0.1.0-rc.1"
+version = "0.1.0"
 description = "Tauri 2 plugin for Apple's iCloud Key-Value Store (NSUbiquitousKeyValueStore) on macOS and iOS"
 authors = ["Kevin Muncie <kevin@kmuncie.com>"]
 license = "MIT OR Apache-2.0"

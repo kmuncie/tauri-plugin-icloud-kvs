@@ -114,11 +114,14 @@ Neither covers `NSUbiquitousKeyValueStore`, and neither supports macOS.
   it self-corrects when stable 0.1.0 publishes. The M1.1-review
   carryover landed: `prepack` now ships license texts + README in the
   npm tarball.
-- [ ] **M1.5b — Stable publish + announce (gated).** After Team Times
-  observes cross-device sync and change events on real hardware
-  against the published rc: publish `0.1.0` (npm untagged → sets
-  `latest`), tag, announce (Tauri Discord, awesome-tauri PR), and bump
-  Team Times to stable. Runbook: `DEVELOPERS.md` "Publishing a
+- [x] **M1.5b — Stable publish + announce (gated).** Real-device gate
+  cleared 2026-07-20: bidirectional edits, offline sync catch-up, and
+  the `onExternalChange` event log (with automatic table refresh —
+  the only code path that updates the demo app's table without a
+  manual Refresh/Sync click) all verified between an iPhone and a
+  MacBook. No open rc-found issues. Publish `0.1.0` (npm untagged →
+  sets `latest`), tag, announce (Tauri Discord, awesome-tauri PR), and
+  bump Team Times to stable. Runbook: `DEVELOPERS.md` "Publishing a
   release", Stage 2.
 
 ## Definition of done

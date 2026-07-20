@@ -6,10 +6,7 @@ Apple's iCloud Key-Value Store
 ([`NSUbiquitousKeyValueStore`](https://developer.apple.com/documentation/foundation/nsubiquitouskeyvaluestore))
 on **macOS** and **iOS**.
 
-> 🧪 **Status: release candidate.** `0.1.0-rc.1` is published for
-> early testing — pin it explicitly (pre-releases are never resolved
-> by default). Stable 0.1.0 ships once cross-device sync has been
-> verified on real hardware.
+> ✅ **Status: stable.** `0.1.0` is published to crates.io and npm.
 
 Built by the maker of [Team Times](https://kmuncie.com/team-times/),
 a menu-bar app for tracking distributed teams across time zones — this
@@ -28,8 +25,8 @@ plugin powers its cross-device config sync.
 ### 1. Install
 
 ```sh
-cargo add tauri-plugin-icloud-kvs@0.1.0-rc.1
-npm install tauri-plugin-icloud-kvs-api@rc
+cargo add tauri-plugin-icloud-kvs
+npm install tauri-plugin-icloud-kvs-api
 ```
 
 ### 2. Register the plugin and permission

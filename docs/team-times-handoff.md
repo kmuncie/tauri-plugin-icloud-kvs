@@ -3,6 +3,13 @@
 Date: 2026-07-14. Audience: whoever (human or agent) integrates
 iCloud KVS sync into Team Times project 2.
 
+> **Update (2026-07-20):** All four checks below passed on real
+> hardware (iPhone + MacBook) — see `docs/milestones.md` M1.5b.
+> Stable `0.1.0` is publishing now; once it's live, bump Team Times
+> to `tauri-plugin-icloud-kvs = "0.1.0"` /
+> `tauri-plugin-icloud-kvs-api@0.1.0` and drop the `@rc` pin, per
+> "Reporting back" below.
+
 ## TL;DR
 
 The plugin is published as a release candidate and ready to consume
